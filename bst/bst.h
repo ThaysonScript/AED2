@@ -1,21 +1,31 @@
-#ifndef BST_H_INCLUDED
-#define BST_H_INCLUDED
+#ifndef BST_H
+#define BST_H
 
-typedef struct BST_NODE
-{
-    int chave;
-    struct BST_NODE *node_esquerdo, *node_direito;
+typedef struct no {
+	int valor;
+	struct no *esq, *dir;
+} no;
 
-} *node;
+typedef no * arvore;
 
-node inserir(int numero, node raiz);
-void preorder(node arvore);
-void inorder(node arvore);
-void posorder(node arvore);
-void reverso(node arvore);
-int altura(node arvore);
-int qtdFolhas(node arvore);
-void caminho(node arvore, int chave_procura);
-node remover(int numero, node raiz);
+arvore inserir (arvore raiz, int valor);        // op 1
 
-#endif  // BST_H_INCLUDED
+void preorder(arvore raiz);                     // op 2
+
+void inorder(arvore raiz);                      // op 3
+
+void posorder(arvore raiz);                     // op 4
+
+void reverso(arvore raiz);                      // op 5
+
+int altura(arvore raiz);                        // op 6
+
+int qtdFolhas(arvore raiz);                     // op 7
+
+void caminho(arvore raiz, int chave_procura);   // op 8
+
+arvore remover (arvore raiz, int valor);        // op 9
+
+arvore maiorElemento(arvore raiz);              // funcao utilidade
+
+#endif

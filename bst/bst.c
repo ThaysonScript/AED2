@@ -2,145 +2,154 @@
 #include <stdlib.h>
 #include "bst.h"
 
-node inserir(int numero, node raiz) {
+//função inserir recebe como parâmetro o ponteiro para a raiz de uma árvore,
+//o valor a ser inserido e RETORNA o ponteiro para a (sub)árvore resultante
+arvore inserir (arvore raiz, int valor) {
+	//caso base - instância mais simples do problema
+	//inserir em uma árvore vazia
+	if(raiz == NULL) {
+		//1. Alocar espaço para o nó
+		arvore novo = (arvore) malloc(sizeof(no));
+		//2. Inicializar o nó
+		novo->valor = valor;
+		novo->esq = NULL;
+		novo->dir = NULL;
+		//3. Ligação do novo nó com o restante da árvore
+		return novo;	
+	} else {
+		if(valor > raiz->valor) {
+			raiz->dir = inserir(raiz->dir, valor);
+		} else {
+			raiz->esq = inserir(raiz->esq, valor);	
+		}
+		return raiz ;
+	}
+}
+
+void preorder(arvore raiz){
+    if(raiz != NULL) {
+        printf("[%d]", raiz->valor);
+        preorder(raiz->esq);
+        preorder(raiz->dir);
+    }
+}
+
+void inorder(arvore raiz){
+    if(raiz != NULL) {
+        inorder(raiz->esq);
+        printf("[%d]", raiz->valor);
+        inorder(raiz->dir);
+    }
+}
+
+void posorder(arvore raiz){
+    if(raiz != NULL) {
+        posorder(raiz->esq);
+        posorder(raiz->dir);
+        printf("[%d]", raiz->valor);
+    }
+}
+
+void reverso(arvore raiz) {
+    if (raiz != NULL) {
+        reverso(raiz->dir);
+        printf("[%d]", raiz->valor); 
+        reverso(raiz->esq);
+    }
+}
+
+int altura(arvore raiz) {
     if (raiz == NULL) {
-        raiz = (node) malloc(sizeof(node));
-
-        raiz->chave = numero;
-        raiz->node_esquerdo = NULL;
-        raiz->node_direito = NULL;
-
-    } else {
-        if (numero > raiz->chave) {
-            raiz->node_direito = inserir(numero, raiz->node_direito);
-
-        } else {
-            raiz->node_esquerdo = inserir(numero, raiz->node_esquerdo);
-        }
-    }
-
-    return raiz;
-}
-
-void preorder(node arvore) {
-    if(arvore != NULL) {
-        printf("[%d]", arvore->chave);
-        preorder(arvore->node_esquerdo);
-        preorder(arvore->node_direito);
-    }    
-}
-
-void inorder(node arvore) {
-    if(arvore != NULL) {
-        inorder(arvore->node_esquerdo);
-        printf("[%d]", arvore->chave);
-        inorder(arvore->node_direito);
-    }
-}
-
-void posorder(node arvore) {
-    if(arvore != NULL) {
-        posorder(arvore->node_esquerdo);
-        posorder(arvore->node_direito);
-        printf("[%d]", arvore->chave);
-    }
-}
-
-void reverso(node arvore) {
-    if (arvore != NULL) {
-        reverso(arvore->node_direito);
-        printf("[%d]", arvore->chave); 
-        reverso(arvore->node_esquerdo);
-    }
-}
-
-int altura(node arvore) {
-    if (arvore == NULL) {
-        return -1;
-
-    } else {
-        int altura_esquerda = altura(arvore->node_esquerdo);
-        int altura_direita = altura(arvore->node_direito);
-
-        if (altura_esquerda > altura_direita) {
-            return altura_esquerda + 1;
-
-        } else {
-            return altura_direita + 1;
-        }
-    }
-}
-
-
-int qtdFolhas(node arvore) {
-    if (arvore == NULL) {
         return 0;
 
-    } else if (arvore->node_esquerdo == NULL && arvore->node_direito == NULL) {
-        return 1;
-    }
+    } else {
+        int altura_esquerda = altura(raiz->esq);
+        int altura_direita = altura(raiz->dir);
 
-    return qtdFolhas(arvore->node_esquerdo) + qtdFolhas(arvore->node_direito); 
+        return (altura_esquerda > altura_direita ? altura_esquerda : altura_direita) + 1;
+    }
 }
 
+int qtdFolhas(arvore raiz) {
+    if (raiz == NULL) 
+        return 0;
 
-void caminho(node arvore, int chave_procura) {
-    if (arvore == NULL || chave_procura == arvore->chave) {
+    if (raiz->esq == NULL && raiz->dir == NULL) 
+        return 1;
+
+    return qtdFolhas(raiz->esq) + qtdFolhas(raiz->dir);
+}
+
+void caminho(arvore raiz, int chave_procura) {
+    if (raiz == NULL) {
         printf("\n");
 
-        return;
-    }
-
-    printf("[%d]", arvore->chave);
-
-    if(chave_procura > arvore->chave) {
-        caminho(arvore->node_direito, chave_procura);
-
     } else {
-        caminho(arvore->node_esquerdo, chave_procura);
+        printf("[%d]", raiz->valor);
 
+        (chave_procura > raiz->valor ? caminho(raiz->dir, chave_procura) : caminho(raiz->esq, chave_procura));
+
+        // if(chave_procura > raiz->valor) {
+        //     caminho(raiz->dir, chave_procura);
+
+        // } else {
+        //     caminho(raiz->esq, chave_procura);
+
+        // }
     }
-
 }
 
-
-node encontrarMinimo(node raiz) {
-    while (raiz->node_esquerdo != NULL) {
-        raiz = raiz->node_esquerdo;
-    }
-    return raiz;
-}
-
-
-node remover(int numero, node raiz) {
-    if (raiz == NULL) {
-        return raiz;
-    }
-
-    if (numero < raiz->chave) {
-        raiz->node_esquerdo = remover(numero, raiz->node_esquerdo);
-
-    } else if (numero > raiz->chave) {
-        raiz->node_direito = remover(numero, raiz->node_direito);
+arvore remover (arvore raiz, int valor) {
+    if(raiz == NULL) {
+        return NULL;    
     } else {
-        // Caso 1: Nó sem filhos ou com apenas um filho
-        if (raiz->node_esquerdo == NULL) {
-            node temp = raiz->node_direito;
-            free(raiz);
-            return temp;
+        //elemento encontrado
+        if(valor == raiz->valor) {
+            //caso 1: zero filhos - folhas
+            if(raiz->esq  == NULL && raiz->dir == NULL ) {
+                free(raiz);
+                return NULL;                  
+            } 
+            
+            //caso 2: um filho
+            //a) exatamente um filho esquerdo
+            if(raiz->esq  != NULL && raiz->dir == NULL ) {
+                arvore raizResultante = raiz->esq;
+                free(raiz);
+                return raizResultante;
+            }
 
-        } else if (raiz->node_direito == NULL) {
-            node temp = raiz->node_esquerdo;
-            free(raiz);
-            return temp;
+            //exatamente um filho direito
+            
+
+            //caso 3: dois filhos
+            if(raiz->esq  != NULL && raiz->dir != NULL) {
+                raiz->valor = maiorElemento(raiz->esq)->valor;
+                raiz->esq = remover(raiz->esq, raiz->valor);
+                return raiz;
+                  
+            }
+
+        } else {
+            //procurar pelo elemento
+            if(valor > raiz->valor) {
+			    raiz->dir = remover(raiz->dir, valor);
+		    } else {
+			    raiz->esq = remover(raiz->esq, valor);	
+		    }
+            return raiz ;
         }
-
-        // Caso 2: Nó com dois filhos
-        node temp = encontrarMinimo(raiz->node_direito);
-        raiz->chave = temp->chave;
-
-        raiz->node_direito = remover(temp->chave, raiz->node_direito);
     }
+}
 
-    return raiz;
+arvore maiorElemento(arvore raiz){
+    arvore temp = raiz;
+
+    if(temp == NULL)
+        return NULL;
+
+    while(temp->dir != NULL) {
+        temp = temp->dir;
+    }
+    return temp;
 }
