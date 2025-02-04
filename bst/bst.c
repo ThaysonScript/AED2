@@ -88,14 +88,6 @@ void caminho(arvore raiz, int chave_procura) {
         printf("[%d]", raiz->valor);
 
         (chave_procura > raiz->valor ? caminho(raiz->dir, chave_procura) : caminho(raiz->esq, chave_procura));
-
-        // if(chave_procura > raiz->valor) {
-        //     caminho(raiz->dir, chave_procura);
-
-        // } else {
-        //     caminho(raiz->esq, chave_procura);
-
-        // }
     }
 }
 
