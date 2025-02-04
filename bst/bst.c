@@ -119,13 +119,18 @@ arvore remover (arvore raiz, int valor) {
                 return raizResultante;
             }
 
-            //exatamente um filho direito
-            
+            //caso 2: um filho
+            //b) exatamente um filho direito
+            if(raiz->dir  != NULL && raiz->esq == NULL ) {
+                arvore raizResultante = raiz->dir;
+                free(raiz);
+                return raizResultante;
+            }
 
             //caso 3: dois filhos
             if(raiz->esq  != NULL && raiz->dir != NULL) {
                 raiz->valor = maiorElemento(raiz->esq)->valor;
-                raiz->esq = remover(raiz->esq, raiz->valor);
+                raiz->esq = remover(raiz->esq, raiz->valor);        // verificar caso 1 e 2 novamente para a remocao
                 return raiz;
                   
             }
@@ -137,7 +142,7 @@ arvore remover (arvore raiz, int valor) {
 		    } else {
 			    raiz->esq = remover(raiz->esq, valor);	
 		    }
-            return raiz ;
+            return raiz;
         }
     }
 }
