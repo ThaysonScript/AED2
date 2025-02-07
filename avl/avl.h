@@ -1,24 +1,30 @@
-#ifndef AVL_H_INCLUDED
-#define AVL_H_INCLUDED
+#ifndef BST_H
+#define BST_H
 
-typedef struct avl_node
-{
-    int chave;
-    int fator_balanco;
-    struct avl_node *no_esquerdo;
-    struct avl_node *no_direito;
-} AVL_NODE;
+typedef struct no {
+    int fb;
+    int valor;
+    struct no *esq, *dir;
+} no;
 
-typedef AVL_NODE *node;
+typedef no *arvore;
 
-node inserir(node raiz, int valor, int *cresceu);
-node remover(node raiz, int valor, int *diminuiu);
-node rotacao_simples_esquerda(node p);
-node rotacao_simples_direita(node p);
-node rotacao_dupla_esquerda(node p);
-node rotacao_dupla_direita(node p);
-node rotacionar(node raiz);
-node maiorElemento(node raiz);
-void preorder(node raiz);
+arvore inserir(arvore raiz, int valor, int *cresceu);
 
-#endif // AVL_H_INCLUDED
+arvore remover(arvore raiz, int valor, int *diminuiu);
+
+int fator_balanceamento(arvore raiz);
+
+arvore maiorElemento(arvore raiz);
+
+void preorder(arvore raiz);
+
+arvore rotacionar(arvore raiz);
+
+arvore rotacao_simples_esquerda(arvore raiz);
+arvore rotacao_dupla_esquerda(arvore raiz);
+
+arvore rotacao_simples_direita(arvore raiz);
+arvore rotacao_dupla_direita(arvore raiz);
+
+#endif
